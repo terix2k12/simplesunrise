@@ -18,8 +18,12 @@
 
 
         </activity>
+
+        <receiver android:name="MyBroadcastReceiver" >
+        </receiver>
+
     </application>
 
-    <uses-permission android:name="android.permission.VIBRATE" />
+    <!--<uses-permission android:name="android.permission.VIBRATE" />-->
 
 </manifest>

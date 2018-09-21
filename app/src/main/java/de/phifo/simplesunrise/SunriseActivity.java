@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -18,7 +19,14 @@ public class SunriseActivity extends AppCompatActivity {
     private AlarmManager alarmMgr;
     private PendingIntent alarmIntent;
 
-    private void lockScreen(boolean lock)
+    private TextView textView;
+
+    public void setText(String text)
+    {
+        textView.setText(text);
+    }
+
+    public void lockScreen(boolean lock)
     {
         if(lock)
         {
@@ -28,14 +36,26 @@ public class SunriseActivity extends AppCompatActivity {
         }
     }
 
+    private void startAler(){
+        int i = 15;
+
+        alarmMgr.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()
+                + (i * 1000), alarmIntent);
+
+        Toast.makeText(this, "Alarm set in " + i + " seconds",
+                Toast.LENGTH_LONG).show();
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         LinearLayout linearLayout = new LinearLayout(this);
 
-        final TextView textView = new TextView(this);
-        textView.setText("Sleeping...");
+        textView = new TextView(this);
+
+        setText("Sleeping...");
 
         Button buttonView = new Button(this);
         buttonView.setOnClickListener(
@@ -44,36 +64,40 @@ public class SunriseActivity extends AppCompatActivity {
                                           public void onClick(View v) {
                             textView.setText("Hello World.");
 
-                            lockScreen(false);
+                                startAler();
+
+                            // lockScreen(false);
                                           }
                                       }
         );
 
-        lockScreen(true);
+
 
         linearLayout.addView(textView);
         linearLayout.addView(buttonView);
 
         setContentView(linearLayout);
 
-        Context context = this;
 
-        alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, MyBroadcastReceiver.class);
-        alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+        alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+
+        Intent intent = new Intent(this, MyBroadcastReceiver.class);
+
+        alarmIntent = PendingIntent.getBroadcast(this,
+                0, intent, 0);
 
         // Set the alarm to start at 8:30 a.m.
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 22);
-        calendar.set(Calendar.MINUTE, 42);
+        calendar.set(Calendar.HOUR_OF_DAY, 21);
+        calendar.set(Calendar.MINUTE, 15);
 
 // setRepeating() lets you specify a precise custom interval--in this case,
 // 20 minutes.
  //       alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
  //               1000 * 60 * 20, alarmIntent);
 
-        alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, alarmIntent);
+      //  alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+      //          AlarmManager.INTERVAL_DAY, alarmIntent);
     }
 }
