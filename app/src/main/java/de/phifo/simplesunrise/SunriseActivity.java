@@ -18,6 +18,16 @@ public class SunriseActivity extends AppCompatActivity {
     private AlarmManager alarmMgr;
     private PendingIntent alarmIntent;
 
+    private void lockScreen(boolean lock)
+    {
+        if(lock)
+        {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }else{
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,20 +42,19 @@ public class SunriseActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                                           @Override
                                           public void onClick(View v) {
-                textView.setText("Hello World.");
+                            textView.setText("Hello World.");
+
+                            lockScreen(false);
                                           }
                                       }
         );
 
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        lockScreen(true);
 
         linearLayout.addView(textView);
         linearLayout.addView(buttonView);
 
         setContentView(linearLayout);
-
-
-        // setContentView(R.layout.activity_sunrise);
 
         Context context = this;
 
