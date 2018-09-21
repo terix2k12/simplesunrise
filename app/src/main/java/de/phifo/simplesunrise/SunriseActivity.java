@@ -6,6 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.Calendar;
 
@@ -16,7 +20,29 @@ public class SunriseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sunrise);
+
+        LinearLayout linearLayout = new LinearLayout(this);
+
+        final TextView textView = new TextView(this);
+        textView.setText("Sleeping...");
+
+        Button buttonView = new Button(this);
+        buttonView.setOnClickListener(
+                new View.OnClickListener() {
+                                          @Override
+                                          public void onClick(View v) {
+                textView.setText("Hello World.");
+                                          }
+                                      }
+        );
+
+        linearLayout.addView(textView);
+        linearLayout.addView(buttonView);
+
+        setContentView(linearLayout);
+
+
+        // setContentView(R.layout.activity_sunrise);
 
         Context context = this;
 
@@ -36,6 +62,6 @@ public class SunriseActivity extends AppCompatActivity {
  //               1000 * 60 * 20, alarmIntent);
 
         alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, alarmIntent);y
+                AlarmManager.INTERVAL_DAY, alarmIntent);
     }
 }
