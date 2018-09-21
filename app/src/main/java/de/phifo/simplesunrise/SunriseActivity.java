@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+//
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,9 +14,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class SunriseActivity extends AppCompatActivity {
+
+    static final String EXTRA_STARTMODE = "de.phifo.simplesunrise.EXTRA_STARTMODE";
+
     private AlarmManager alarmMgr;
     private PendingIntent alarmIntent;
 
@@ -39,10 +44,26 @@ public class SunriseActivity extends AppCompatActivity {
     private void startAler(){
         int i = 15;
 
-        alarmMgr.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()
-                + (i * 1000), alarmIntent);
+//        alarmMgr.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()
+//                + (i * 1000), alarmIntent);
 
-        Toast.makeText(this, "Alarm set in " + i + " seconds",
+        // Set the alarm to start at 8:30 a.m.
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 27);
+//        alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+//                          AlarmManager.INTERVAL_DAY, alarmIntent);
+
+        long millis = calendar.getTimeInMillis();
+
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+
+        alarmMgr.set(AlarmManager.RTC_WAKEUP, millis, alarmIntent);
+
+        Toast.makeText(this, "Alarm set in " + i + " seconds" +
+                        format1.format(calendar.getTime()),
                 Toast.LENGTH_LONG).show();
 
     }
@@ -55,7 +76,20 @@ public class SunriseActivity extends AppCompatActivity {
 
         textView = new TextView(this);
 
-        setText("Sleeping...");
+        if(getIntent().getExtras()!=null)
+        {
+            Object startmode = getIntent().getExtras().get(EXTRA_STARTMODE);
+            if(startmode == null)
+            {
+                setText("Sleeping...");
+            }    else{
+                setText("Ringing...");
+                lockScreen(true);
+            }
+        }
+        else{
+            setText("First?!...");
+        }
 
         Button buttonView = new Button(this);
         buttonView.setOnClickListener(
@@ -86,18 +120,13 @@ public class SunriseActivity extends AppCompatActivity {
         alarmIntent = PendingIntent.getBroadcast(this,
                 0, intent, 0);
 
-        // Set the alarm to start at 8:30 a.m.
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 21);
-        calendar.set(Calendar.MINUTE, 15);
+
 
 // setRepeating() lets you specify a precise custom interval--in this case,
 // 20 minutes.
  //       alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
  //               1000 * 60 * 20, alarmIntent);
 
-      //  alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-      //          AlarmManager.INTERVAL_DAY, alarmIntent);
+      //
     }
 }

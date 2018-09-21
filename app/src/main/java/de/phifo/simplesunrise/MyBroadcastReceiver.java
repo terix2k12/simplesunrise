@@ -19,6 +19,9 @@ public class MyBroadcastReceiver  extends BroadcastReceiver {
 
             Intent mainIntent = new Intent(context, SunriseActivity.class);
             mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            mainIntent.putExtra(SunriseActivity.EXTRA_STARTMODE, "ring");
+
         context.startActivity(mainIntent);
         }
 
