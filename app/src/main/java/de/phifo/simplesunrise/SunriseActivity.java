@@ -84,7 +84,7 @@ public class SunriseActivity extends AppCompatActivity {
                 lockScreen(true);
             }
         } else {
-            setText("First?!...");
+            setText("second?!...");
         }
 
         Button buttonView = new Button(this);
@@ -104,7 +104,7 @@ public class SunriseActivity extends AppCompatActivity {
 
         Button buttonLight = new Button(this);
         buttonLight.setText("Turn on Light");
-        buttonView.setOnClickListener(
+        buttonLight.setOnClickListener(
                 new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
@@ -116,6 +116,7 @@ public class SunriseActivity extends AppCompatActivity {
 
         linearLayout.addView(textView);
         linearLayout.addView(buttonView);
+        linearLayout.addView(buttonLight);
 
         setContentView(linearLayout);
 
@@ -136,9 +137,20 @@ public class SunriseActivity extends AppCompatActivity {
         //
     }
 
+    private boolean toggle = false;
+
     private void makeBright(){
 
-        
+        WindowManager.LayoutParams params = getWindow().getAttributes();
 
+        if(toggle){
+            params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_OFF;
+            toggle = false;
+        }else{
+            params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL;
+            toggle = true;
+        }
+
+        getWindow().setAttributes(params);
     }
 }
