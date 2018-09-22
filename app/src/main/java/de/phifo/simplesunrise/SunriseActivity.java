@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
@@ -25,7 +26,11 @@ public class SunriseActivity extends AppCompatActivity {
     private AlarmManager alarmMgr;
     private PendingIntent alarmIntent;
 
+    private Handler myHandler;
+
     private TextView textView;
+
+    private Button buttonLight;
 
     public void setText(String text) {
         textView.setText(text);
@@ -88,6 +93,8 @@ public class SunriseActivity extends AppCompatActivity {
             setText("second?!...");
         }
 
+        myHandler = new Handler();
+
         Button buttonView = new Button(this);
         buttonView.setText("Set Alert");
         buttonView.setOnClickListener(
@@ -103,8 +110,8 @@ public class SunriseActivity extends AppCompatActivity {
                 }
         );
 
-        Button buttonLight = new Button(this);
-        buttonLight.setText("Turn on Light");
+          buttonLight = new Button(this);
+        buttonLight.setText("Turn off Light");
         buttonLight.setOnClickListener(
                 new View.OnClickListener(){
                     @Override
@@ -140,19 +147,48 @@ public class SunriseActivity extends AppCompatActivity {
 
     private boolean toggle = false;
 
-    private void makeBright(LinearLayout li){
+    private void makeBright(final LinearLayout li){
 
         WindowManager.LayoutParams params = getWindow().getAttributes();
+        final int  f;
 
         if(toggle){
-            params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_OFF;
-            toggle = false;
-            li.setBackgroundColor(Color.parseColor("#000000"));
-        }else{
             params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL;
+//            li.setBackgroundColor(Color.parseColor("#ffffff"));
+            toggle = false;
+            f = 0;
+              buttonLight.setText("Set Light OFF");
+        }else{
+            params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_OFF;
             toggle = true;
-            li.setBackgroundColor(Color.parseColor("#ffffff"));
+//            li.setBackgroundColor(Color.parseColor("#000000"));
+            f = 255;
+
+            buttonLight.setText("Set Light ON");
         }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i <= 255; i++) {
+                    final int c = i;
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    myHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            int d = Math.abs(f-c);
+                            int col = Color.rgb(d, d, d);
+                            li.setBackgroundColor(col);
+                        }
+                    });
+                }
+            }
+        }).start();
 
         getWindow().setAttributes(params);
     }
