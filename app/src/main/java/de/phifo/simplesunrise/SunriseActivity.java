@@ -31,6 +31,7 @@ public class SunriseActivity extends AppCompatActivity {
     private TextView textView;
 
     private Button buttonLight;
+    private boolean toggle = false;
 
     public void setText(String text) {
         textView.setText(text);
@@ -50,11 +51,13 @@ public class SunriseActivity extends AppCompatActivity {
 //        alarmMgr.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()
 //                + (i * 1000), alarmIntent);
 
-        // Set the alarm to start at 8:30 a.m.
+        long ww2 = System.currentTimeMillis() + (2 * 60 * 1000);
+
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 19);
-        calendar.set(Calendar.MINUTE, 45);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 6);
+        calendar.set(Calendar.SECOND, 0);
 //        alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
 //                          AlarmManager.INTERVAL_DAY, alarmIntent);
 
@@ -64,7 +67,7 @@ public class SunriseActivity extends AppCompatActivity {
 
         long diff = millis - System.currentTimeMillis();
 
-        setText(" Alarm in Minutes from now: " + (diff / 1000 / 60)+"  ");
+        setText(ww2 + " --" + millis + " Alarm in Minutes from now: " + (diff / 1000 / 60) + "  ");
 
         alarmMgr.set(AlarmManager.RTC_WAKEUP, millis, alarmIntent);
 
@@ -110,10 +113,10 @@ public class SunriseActivity extends AppCompatActivity {
                 }
         );
 
-          buttonLight = new Button(this);
+        buttonLight = new Button(this);
         buttonLight.setText("Turn off Light");
         buttonLight.setOnClickListener(
-                new View.OnClickListener(){
+                new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         makeBright(linearLayout);
@@ -145,25 +148,20 @@ public class SunriseActivity extends AppCompatActivity {
         //
     }
 
-    private boolean toggle = false;
-
-    private void makeBright(final LinearLayout li){
+    private void makeBright(final LinearLayout li) {
 
         WindowManager.LayoutParams params = getWindow().getAttributes();
-        final int  f;
+        final int f;
 
-        if(toggle){
+        if (toggle) {
             params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL;
-//            li.setBackgroundColor(Color.parseColor("#ffffff"));
             toggle = false;
             f = 0;
-              buttonLight.setText("Set Light OFF");
-        }else{
+            buttonLight.setText("Set Light OFF");
+        } else {
             params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_OFF;
             toggle = true;
-//            li.setBackgroundColor(Color.parseColor("#000000"));
             f = 255;
-
             buttonLight.setText("Set Light ON");
         }
 
@@ -181,7 +179,7 @@ public class SunriseActivity extends AppCompatActivity {
                     myHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            int d = Math.abs(f-c);
+                            int d = Math.abs(f - c);
                             int col = Color.rgb(d, d, d);
                             li.setBackgroundColor(col);
                         }
