@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -71,7 +72,7 @@ public class SunriseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        LinearLayout linearLayout = new LinearLayout(this);
+        final LinearLayout linearLayout = new LinearLayout(this);
 
         textView = new TextView(this);
 
@@ -108,7 +109,7 @@ public class SunriseActivity extends AppCompatActivity {
                 new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
-                        makeBright();
+                        makeBright(linearLayout);
                     }
                 }
         );
@@ -139,16 +140,18 @@ public class SunriseActivity extends AppCompatActivity {
 
     private boolean toggle = false;
 
-    private void makeBright(){
+    private void makeBright(LinearLayout li){
 
         WindowManager.LayoutParams params = getWindow().getAttributes();
 
         if(toggle){
             params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_OFF;
             toggle = false;
+            li.setBackgroundColor(Color.parseColor("#000000"));
         }else{
             params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL;
             toggle = true;
+            li.setBackgroundColor(Color.parseColor("#ffffff"));
         }
 
         getWindow().setAttributes(params);
