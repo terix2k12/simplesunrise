@@ -79,7 +79,12 @@ public class SunriseWakeupActivity extends Activity {
                 for (int i = 0; i <= 255; i++) {
                     final int c = i;
                     try {
-                        Thread.sleep(10);
+
+                        // Delay from black to white for 10 Minutes
+
+                        long delay = (5*60*1000) / 255;
+
+                        Thread.sleep(delay);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

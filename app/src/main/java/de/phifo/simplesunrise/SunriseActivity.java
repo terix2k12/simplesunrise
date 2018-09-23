@@ -96,7 +96,7 @@ public class SunriseActivity extends AppCompatActivity implements ITimeConsumer 
         }
 
         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-        calendar.set(Calendar.MINUTE, minutes);
+        calendar.set(Calendar.MINUTE, minutes-5);
         calendar.set(Calendar.SECOND, 0);
 
         startAlert(calendar.getTimeInMillis());
