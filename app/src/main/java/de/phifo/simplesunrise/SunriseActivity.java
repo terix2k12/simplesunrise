@@ -55,8 +55,8 @@ public class SunriseActivity extends AppCompatActivity {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 23);
-        calendar.set(Calendar.MINUTE, 6);
+        calendar.set(Calendar.HOUR_OF_DAY, 10);
+        calendar.set(Calendar.MINUTE, 16);
         calendar.set(Calendar.SECOND, 0);
 //        alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
 //                          AlarmManager.INTERVAL_DAY, alarmIntent);
@@ -70,6 +70,10 @@ public class SunriseActivity extends AppCompatActivity {
         setText(ww2 + " --" + millis + " Alarm in Minutes from now: " + (diff / 1000 / 60) + "  ");
 
         alarmMgr.set(AlarmManager.RTC_WAKEUP, millis, alarmIntent);
+
+        // from api lvl 21
+//        AlarmManager.AlarmClockInfo info = new AlarmManager.AlarmClockInfo(millis, null);
+//        alarmMgr.setAlarmClock(info, alarmIntent);
 
         Toast.makeText(this, "Alarm set in " + i + "  " +
                 format1.format(calendar.getTime()), Toast.LENGTH_LONG).show();
@@ -90,6 +94,12 @@ public class SunriseActivity extends AppCompatActivity {
                 setText("Sleeping...");
             } else {
                 setText("Ringing...");
+
+                getWindow().addFlags(
+                                WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD|
+                                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED|
+                                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+
                 lockScreen(true);
             }
         } else {
