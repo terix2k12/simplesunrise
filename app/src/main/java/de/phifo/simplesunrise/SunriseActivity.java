@@ -90,10 +90,14 @@ public class SunriseActivity extends AppCompatActivity implements ITimeConsumer 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
 
-        if(calendar.get(Calendar.HOUR_OF_DAY) < hourOfDay)
-        {
+         if(calendar.get(Calendar.HOUR_OF_DAY) > hourOfDay)
+         {
             calendar.add(Calendar.DAY_OF_YEAR, 1);
-        }
+         }else if(calendar.get(Calendar.HOUR_OF_DAY) == hourOfDay &&
+                  calendar.get(Calendar.MINUTE) >= minutes
+                 ){
+             calendar.add(Calendar.DAY_OF_YEAR, 1);
+         }
 
         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
         calendar.set(Calendar.MINUTE, minutes-5);
